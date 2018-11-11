@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="proxyfinder.qml">../proxyfinder.qml</file>
+        <file alias="images/qt-apply.png">../images/qt-apply.png</file>
+        <file alias="images/qt-cancel.png">../images/qt-cancel.png</file>
+        <file alias="images/qt-config.png">../images/qt-config.png</file>
+        <file alias="images/qt-home.png">../images/qt-home.png</file>
+        <file alias="images/qt-logo.ico">../images/qt-logo.ico</file>
+        <file alias="images/qt-logo.png">../images/qt-logo.png</file>
+        <file alias="images/qt-logo@2x.png">../images/qt-logo@2x.png</file>
+        <file alias="images/qt-logo@3x.png">../images/qt-logo@3x.png</file>
+        <file alias="images/qt-logo@4x.png">../images/qt-logo@4x.png</file>
+        <file alias="images/qt-run.png">../images/qt-run.png</file>
+        <file alias="images/qt_zh_CN.qm">../images/qt_zh_CN.qm</file>
+        <file alias="images/widgets.qm">../images/widgets.qm</file>
+        <file>about.qml</file>
+        <file>config.qml</file>
+    </qresource>
+</RCC>
