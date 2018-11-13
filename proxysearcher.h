@@ -146,23 +146,7 @@ public:
                 future.waitForFinished();
             }
         } else {
-            QDnsLookup dns;
-            QEventLoop loop;
-            QObject::connect(&dns, &QDnsLookup::finished, &loop, &QEventLoop::quit);
-            dns.setType(QDnsLookup::A);
-            dns.setName(validate_host);
-            dns.lookup();
-            loop.exec();
-            if (dns.error() != QDnsLookup::NoError) {
-                return;
-            }
-            foreach (const QDnsHostAddressRecord &record, dns.hostAddressRecords()) {
-                QString ip = record.value().toString();
-                update_status(QString("发现%1的IP:%2").arg(validate_host).arg(ip));
-                mlock.lock();
-                ip_list.insert(pre + ip + post);
-                mlock.unlock();
-            }
+            ip_list.insert(validate_src);
         }
         update_status("DNS查找完毕");
     }

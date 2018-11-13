@@ -160,7 +160,8 @@ void ProxyValidateThread::run() {
     // 保留topN
     if (response.indexOf(proxycls->validate_key) != -1) {
         proxycls->mlock.lock();
-        log(QString("ProxyValid host=%1 port=%2 timeout=%3 valid").arg(hostname).arg(port).arg(tt));
+        log(QString("ProxyValid ip=%1 host=%2 port=%3 timeout=%4 valid")
+            .arg(ip).arg(hostname).arg(port).arg(tt));
         result = "有效";
         proxycls->max_runlist.push_back(ProxyListItem(hostname, port, tt));
         if (proxycls->max_runlist.length() > ProxySearch::MAX_LNE_NUM) {
@@ -178,7 +179,8 @@ void ProxyValidateThread::run() {
         }
         proxycls->mlock.unlock();
     } else {
-        log(QString("ProxyValid host=%1 port=%2 timeout=%3 invalid").arg(hostname).arg(port).arg(timeout));
+        log(QString("ProxyValid ip=%1 host=%2 port=%3 timeout=%4 invalid")
+            .arg(ip).arg(hostname).arg(port).arg(timeout));
     }
     proxycls->update_status(QString("搜索代理:%1 验证代理:进行 %2:%3 %4")
         .arg(proxycls->is_search_done? "结束" : "进行").arg(hostname).arg(port).arg(result));
