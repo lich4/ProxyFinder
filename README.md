@@ -31,3 +31,5 @@ http/https proxy find and validate all in one
 * host IP相对于root根元素的XPATH
 * port PORT相对于root根元素的XPATH
 * page url中存在多页代理需要收集
+
+![截图](https://raw.githubusercontent.com/lichao890427/ProxyFinder/master/screenshot/proxyfinder_v1.1.png)
