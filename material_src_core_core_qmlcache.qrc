@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<RCC version="1.0">
+    <qresource prefix="/Material">
+        <file alias="FontAwesome.otf">material/src/core/FontAwesome.otf</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<RCC version="1.0">
+    <qresource prefix="/Material/Extras">
+        <file alias="qmldir">material/src/extras/qmldir</file>
+    </qresource>
+</RCC>

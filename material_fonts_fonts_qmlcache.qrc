@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<RCC version="1.0">
+    <qresource prefix="/Material/Fonts">
+        <file alias="qmldir">material/fonts/qmldir</file>
+        <file alias="roboto/Roboto-Black.ttf">material/fonts/roboto/Roboto-Black.ttf</file>
+        <file alias="roboto/Roboto-BlackItalic.ttf">material/fonts/roboto/Roboto-BlackItalic.ttf</file>
+        <file alias="roboto/Roboto-Bold.ttf">material/fonts/roboto/Roboto-Bold.ttf</file>
+        <file alias="roboto/Roboto-BoldItalic.ttf">material/fonts/roboto/Roboto-BoldItalic.ttf</file>
+        <file alias="roboto/Roboto-Italic.ttf">material/fonts/roboto/Roboto-Italic.ttf</file>
+        <file alias="roboto/Roboto-Light.ttf">material/fonts/roboto/Roboto-Light.ttf</file>
+        <file alias="roboto/Roboto-LightItalic.ttf">material/fonts/roboto/Roboto-LightItalic.ttf</file>
+        <file alias="roboto/Roboto-Medium.ttf">material/fonts/roboto/Roboto-Medium.ttf</file>
+        <file alias="roboto/Roboto-MediumItalic.ttf">material/fonts/roboto/Roboto-MediumItalic.ttf</file>
+        <file alias="roboto/Roboto-Regular.ttf">material/fonts/roboto/Roboto-Regular.ttf</file>
+        <file alias="roboto/Roboto-Thin.ttf">material/fonts/roboto/Roboto-Thin.ttf</file>
+        <file alias="roboto/Roboto-ThinItalic.ttf">material/fonts/roboto/Roboto-ThinItalic.ttf</file>
+        <file alias="roboto/RobotoCondensed-Bold.ttf">material/fonts/roboto/RobotoCondensed-Bold.ttf</file>
+        <file alias="roboto/RobotoCondensed-BoldItalic.ttf">material/fonts/roboto/RobotoCondensed-BoldItalic.ttf</file>
+        <file alias="roboto/RobotoCondensed-Italic.ttf">material/fonts/roboto/RobotoCondensed-Italic.ttf</file>
+        <file alias="roboto/RobotoCondensed-Light.ttf">material/fonts/roboto/RobotoCondensed-Light.ttf</file>
+        <file alias="roboto/RobotoCondensed-LightItalic.ttf">material/fonts/roboto/RobotoCondensed-LightItalic.ttf</file>
+        <file alias="roboto/RobotoCondensed-Regular.ttf">material/fonts/roboto/RobotoCondensed-Regular.ttf</file>
+    </qresource>
+</RCC>

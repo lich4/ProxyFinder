@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+		<file>proxyfinder.qml</file>
+		<file>basic_config.qml</file>
+		<file>dns_resolve.qml</file>
+		<file>https_search.qml</file>
+    </qresource>
+</RCC>

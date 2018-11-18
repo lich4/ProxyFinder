@@ -1,36 +1,31 @@
-TEMPLATE = app
-
-TARGET = proxyfinder
+DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
+include(material/material.pri)
 
 QT += quick widgets xmlpatterns concurrent sql
-
 CONFIG += c++11
 
+DEFINES += QT_DEPRECATED_WARNINGS
+
 SOURCES += \
-    proxyfinder.cpp \
-    utils.cpp \
-    pugixml.cpp \
-    proxysearcher.cpp
+    src/proxyfinder.cpp \
+    src/utils.cpp \
+    src/pugixml.cpp \
+    src/proxysearcher.cpp
 
 RESOURCES += \
-    proxyfinder.qml \
-	config.qml \
-    $$files(images/*.*) 
+    icons/icons.qrc \
+    images/images.qrc \
+    qml/qml.qrc
 
-RC_ICONS = qt-logo.ico
+RC_ICONS = images/qt-logo.ico
 
-INSTALLS += target
 
 HEADERS += \
-    proxysearcher.h \
-    common.h \
-    utils.h
+    src/proxysearcher.h \
+    src/common.h \
+    src/utils.h
 
-DISTFILES +=
+win32: LIBS += -L$$PWD/lib/ -ltidy -L$$PWD/lib/ -lxml2
 
-win32: LIBS += -L$$PWD/./ -ltidy -L$$PWD/./ -lxml2
-
-INCLUDEPATH += $$PWD/.
-DEPENDPATH += $$PWD/.
-
-target.path = $$PWD/debug
+INCLUDEPATH += $$PWD/src
+DEPENDPATH += $$PWD/lib
