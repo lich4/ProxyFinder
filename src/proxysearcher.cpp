@@ -41,7 +41,6 @@ int ProxySearch:: test_proxy_server_list() {
             break;
         }
     }
-    validate_threadpool.waitForDone();
     return 0;
 }
 
@@ -56,6 +55,8 @@ int ProxySearch::get_proxy_server_list() {
     WorkThread test_thread(this);
     test_thread.start();
 
+    search_threadpool.clear();
+    validate_threadpool.clear();
     for (const QString& url : search_src.split(";")) {
         if (is_cancel) {
             break;
@@ -98,6 +99,9 @@ int ProxySearch::get_proxy_server_list() {
             QString type = obj.value("type").toString();
             QString baseurl = obj.value("url").toString();
             if (type == "txt") {
+                if (is_cancel) {
+                    break;
+                }
                 ProxySearchThread* th = new ProxySearchThread(this, baseurl, "", "", "", type);
                 search_threadpool.start(th);
             } else if (type == "html") {
@@ -116,10 +120,16 @@ int ProxySearch::get_proxy_server_list() {
                 }
                 for (int i = beginpage; i <= endpage; i++) {
                     if (endpage == beginpage) {
+                        if (is_cancel) {
+                            break;
+                        }
                         ProxySearchThread* th = new ProxySearchThread(
                                     this, baseurl, root, host, port, type);
                         search_threadpool.start(th);
                     } else {
+                        if (is_cancel) {
+                            break;
+                        }
                         ProxySearchThread* th = new ProxySearchThread(
                                     this, baseurl + pagequery.arg(i), root, host, port, type);
                         search_threadpool.start(th);
@@ -134,6 +144,7 @@ int ProxySearch::get_proxy_server_list() {
     //update_status("搜索代理:结束 验证代理:运行");
 
     test_thread.wait();
+    validate_threadpool.waitForDone();
     is_validating = false;
     is_validate_done = true;
     //update_status("搜索代理:结束 验证代理:结束");
@@ -236,5 +247,4 @@ void ProxySearchThread::run() {
             proxycls->mlock.unlock();
         }
     }
-    QThread::msleep(200);
 }

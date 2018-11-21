@@ -71,11 +71,8 @@ ApplicationWindow {
                 iconName: "stop"
                 name: "停止搜索"
                 onTriggered: {
-                    if (window.selectedComponent === "dns_resolve") {
-                        commu.cancel_dns_lookup()
-                    } else if (window.selectedComponent == "https_search") {
-                        commu.cancel_search_proxy()
-                    }
+                    commu.cancel_dns_lookup()
+                    commu.cancel_search_proxy()
                 }
                 hoverAnimation: true
             },
@@ -86,7 +83,7 @@ ApplicationWindow {
                 onTriggered: {
                     commu.cancel_dns_lookup()
                     commu.cancel_search_proxy()
-                    Qt.quit()
+                    commu.exit_process()
                 }
 
                 hoverAnimation: true

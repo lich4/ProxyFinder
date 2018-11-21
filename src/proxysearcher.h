@@ -82,7 +82,7 @@ public:
     void update_runlist() {
         mlock.lock();
         FunctionTransfer::execinmain([&](){
-            QVariant retval;
+            QVariant retval = 0;
             QVariant arg0 = -1;
             QVariant arg1;
             QMetaObject::invokeMethod(root_https_search, "clear", Qt::DirectConnection,
@@ -104,7 +104,7 @@ public:
         QtConcurrent::run([&]() {
             // 激活进度条
             FunctionTransfer::execinmain([&](){
-                QVariant retval;
+                QVariant retval = 0;
                 QMetaObject::invokeMethod(root_dns_resolve, "start", Qt::DirectConnection,
                     Q_RETURN_ARG(QVariant, retval));
             });
@@ -140,7 +140,7 @@ public:
                     mlock.lock();
                     if (!ip_set.contains(ip)) {
                         FunctionTransfer::execinmain([&](){
-                            QVariant retval;
+                            QVariant retval = 0;
                             QVariant arg0 = -1;
                             QVariant arg1 = ip;
                             QMetaObject::invokeMethod(root_dns_resolve, "update", Qt::DirectConnection,
@@ -168,7 +168,7 @@ public:
             is_searching = false;
             // 禁止进度条
             FunctionTransfer::execinmain([&](){
-                QVariant retval;
+                QVariant retval = 0;
                 QMetaObject::invokeMethod(root_dns_resolve, "stop", Qt::DirectConnection,
                     Q_RETURN_ARG(QVariant, retval));
             });
@@ -182,7 +182,6 @@ public:
     }
     Q_INVOKABLE void get_dns_resolve_unlock() {
         mlock.unlock();
-        QThread::msleep(100);
     }
     Q_INVOKABLE int get_dns_resolve_listview_size() {
         return ip_list.size();
@@ -203,7 +202,7 @@ public:
         }
         is_searching = false;
         FunctionTransfer::execinmain([&](){
-            QVariant retval;
+            QVariant retval = 0;
             QMetaObject::invokeMethod(root_dns_resolve, "stop", Qt::DirectConnection,
                 Q_RETURN_ARG(QVariant, retval));
         });
@@ -276,7 +275,7 @@ public:
         ip_list.clear();
         QtConcurrent::run([&]() {
             FunctionTransfer::execinmain([&](){
-                QVariant retval;
+                QVariant retval = 0;
                 QMetaObject::invokeMethod(root_https_search, "start", Qt::DirectConnection,
                     Q_RETURN_ARG(QVariant, retval));
             });
@@ -285,7 +284,7 @@ public:
             // 从代理源获取代理列表
             get_proxy_server_list();
             FunctionTransfer::execinmain([&](){
-                QVariant retval;
+                QVariant retval = 0;
                 QMetaObject::invokeMethod(root_https_search, "stop", Qt::DirectConnection,
                     Q_RETURN_ARG(QVariant, retval));
             });
@@ -305,7 +304,7 @@ public:
         is_searching = false;
         is_validating = false;
         FunctionTransfer::execinmain([&](){
-            QVariant retval;
+            QVariant retval = 0;
             QMetaObject::invokeMethod(root_https_search, "stop", Qt::DirectConnection,
                 Q_RETURN_ARG(QVariant, retval));
         });
@@ -318,7 +317,6 @@ public:
     }
     Q_INVOKABLE void get_https_search_unlock() {
         mlock.unlock();
-        QThread::msleep(100);
     }
     Q_INVOKABLE int get_https_search_listview_size() {
         return max_runlist.size();
@@ -354,7 +352,6 @@ public:
         }
     }
     Q_INVOKABLE void exit_process() {
-        cancel_search_proxy();
         exit(0);
     }
 private:
