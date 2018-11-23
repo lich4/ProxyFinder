@@ -11,6 +11,7 @@ import Material.Extras 0.1
 import Material.ListItems 0.1 as ListItem
 
 ColumnLayout{
+    id: root_basic_config
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: dp(32)
@@ -26,6 +27,9 @@ ColumnLayout{
                 placeholderText: "代理搜索源"
                 floatingLabel: true
                 onTextChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_search_source(text_search_source.text)
                 }
             }
@@ -35,16 +39,19 @@ ColumnLayout{
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: row1.bottom
-            anchors.topMargin: dp(32)
+            anchors.topMargin: dp(16)
             TextField {
                 id: text_validate_source
                 anchors.left: parent.left
                 anchors.right: text_validate_key.left
-                anchors.rightMargin: dp(32)
+                anchors.rightMargin: dp(16)
                 text: "http://www.guimp.com"
                 placeholderText: "验证URL"
                 floatingLabel: true
                 onTextChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_validate_source(text_validate_source.text)
                 }
             }
@@ -55,6 +62,9 @@ ColumnLayout{
                 placeholderText: "关键字"
                 floatingLabel: true
                 onTextChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_validate_key(text_validate_key.text)
                 }
             }
@@ -63,6 +73,8 @@ ColumnLayout{
             id: row3
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.top: row2.bottom
+            anchors.topMargin: dp(16)
             Label {
                 id: label_search_timeout
                 text: "搜索超时时间:%1毫秒".arg(text_search_timeout.value)
@@ -81,13 +93,18 @@ ColumnLayout{
                 minimumValue: 200
                 maximumValue: 5000
                 onValueChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_search_timeout(text_search_timeout.value)
                 }
             }
         }
         RowLayout {
+            id: row4
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.top: row3.bottom
             Label {
                 id: label_validate_timeout
                 text: "验证超时时间:%1毫秒".arg(text_validate_timeout.value)
@@ -106,13 +123,18 @@ ColumnLayout{
                 minimumValue: 200
                 maximumValue: 5000
                 onValueChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_validate_timeout(text_validate_timeout.value)
                 }
             }
         }
         RowLayout {
+            id: row5
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.top: row4.bottom
             Label {
                 id: label_validate_count
                 text: "验证次数:%1".arg(text_validate_count.value)
@@ -131,13 +153,18 @@ ColumnLayout{
                 minimumValue: 1
                 maximumValue: 9
                 onValueChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_validate_count(text_validate_count.value)
                 }
             }
         }
         RowLayout {
+            id: row6
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.top: row5.bottom
             Label {
                 id: label_thread_count
                 text: "线程数:%1".arg(text_thread_count.value)
@@ -156,6 +183,9 @@ ColumnLayout{
                 minimumValue: 10
                 maximumValue: 100
                 onValueChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_thread_count(text_thread_count.value)
                 }
             }
@@ -169,6 +199,9 @@ ColumnLayout{
                 text:"使用DNS解析IP"
                 checked: false
                 onCheckedChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_fulldns(checked)
                 }
             }
@@ -181,10 +214,47 @@ ColumnLayout{
                 placeholderText: "DNS源"
                 floatingLabel: true
                 onTextChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
                     commu.set_dns_source(text_dns_source.text)
                 }
             }
         }
+        RowLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            TextField {
+                id: text_httpserv_port
+                anchors.left: parent.left
+                anchors.right: parent.right
+                text: "81"
+                placeholderText: "HTTP服务器端口"
+                floatingLabel: true
+                onTextChanged: {
+                    if (!root_basic_config.init) {
+                        return
+                    }
+                    commu.set_httpserv_port(text_httpserv_port.text)
+                }
+            }
+        }
+    }
+    Component.onCompleted: {
+        restore()
+    }
+    property var init: false
+    function restore() {
+        text_search_source.text = commu.get_search_source()
+        text_validate_source.text = commu.get_validate_source()
+        text_validate_key.text = commu.get_validate_key()
+        text_search_timeout.value = commu.get_search_timeout()
+        text_validate_timeout.value = commu.get_validate_timeout()
+        text_validate_count.value = commu.get_validate_count()
+        text_thread_count.value = commu.get_thread_count()
+        text_dns_source.text = commu.get_dns_source()
+        text_httpserv_port.text = commu.get_httpserv_port()
+        init = true
     }
 }
 

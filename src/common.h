@@ -43,6 +43,7 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QUdpSocket>
 #include <QtWidgets/QApplication>

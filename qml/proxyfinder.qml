@@ -30,7 +30,8 @@ ApplicationWindow {
             "child": [
                 "basic_config",
                 "dns_resolve",
-                "https_search"
+                "https_search",
+                "ssr_search"
             ]
         },
         "basic_config": {
@@ -44,6 +45,10 @@ ApplicationWindow {
         "https_search": {
             "name": "HTTP/HTTPS代理搜索",
             "qml": "https_search.qml"
+        },
+        "ssr_search": {
+            "name": "SS/SSR服务器搜索",
+            "qml": "ssr_search.qml"
         }
     }
 
@@ -62,6 +67,8 @@ ApplicationWindow {
                         commu.do_dns_lookup()
                     } else if (window.selectedComponent == "https_search") {
                         commu.do_search_proxy()
+                    } else if (window.selectedComponent == "ssr_search") {
+                        commu.do_search_ssr()
                     }
                 }
                 hoverAnimation: true
@@ -119,6 +126,8 @@ ApplicationWindow {
                                             commu.do_dns_lookup()
                                         } else if (window.selectedComponent == "https_search") {
                                             commu.do_search_proxy()
+                                        } else if (window.selectedComponent == "ssr_search") {
+                                            commu.do_search_ssr()
                                         }
                                     }
                                 }
@@ -165,6 +174,8 @@ ApplicationWindow {
                                     commu.do_dns_lookup()
                                 } else if (window.selectedComponent == "https_search") {
                                     commu.do_search_proxy()
+                                } else if (window.selectedComponent == "ssr_search") {
+                                    commu.do_search_ssr()
                                 }
                             }
                         }

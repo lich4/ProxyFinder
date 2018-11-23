@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "utils.h"
+#include "httpserver.h"
 
 #include "libxml/tree.h"
 #include "libxml/parser.h"
@@ -67,6 +68,7 @@ public:
             inst.root_proxyfinder = engine->rootObjects().first();
             inst.lastcheck_dns = -1;
             inst.lastcheck_proxy = -1;
+            inst.httpserv_port = 81;
             inst.validate_threadpool.setMaxThreadCount(inst.thread_count);
             inst.search_threadpool.setMaxThreadCount(1);
         }
@@ -267,6 +269,12 @@ public:
     Q_INVOKABLE void set_fulldns(bool checked) {
         fulldns = checked;
     }
+    Q_INVOKABLE void set_httpserv_port(QString port) {
+        httpserv_port = port.toInt();
+    }
+    Q_INVOKABLE QString get_httpserv_port() {
+        return QString("%1").arg(httpserv_port);
+    }
     Q_INVOKABLE void do_search_proxy() {
         if (is_searching || is_validating) {
             return;
@@ -351,6 +359,181 @@ public:
             proxyenableValue.setValue("ProxyServer", QString("%1:%2").arg(hostname).arg(port));
         }
     }
+    Q_INVOKABLE void register_ssr_search(QObject* root) {
+        root_ssr_search = root;
+    }
+Q_INVOKABLE bool get_ssr_search_progress_visible() {
+        return is_searching;
+    }
+    Q_INVOKABLE void get_ssr_search_lock() {
+        mlock.lock();
+    }
+    Q_INVOKABLE void get_ssr_search_unlock() {
+        mlock.unlock();
+    }
+    Q_INVOKABLE int get_ssr_search_listview_size() {
+        return ssr_list.size();
+    }
+    Q_INVOKABLE QString get_ssr_search_listview_item(int i) {
+        return ssr_list[i];
+    }
+    void get_ssr_server_list() {
+        QSet<QString> candilist;
+        QString url, root, content, decoded;
+        pugi::xml_document doc;
+        pugi::xpath_node_set xpathnodes;
+        int timeout = this->search_tmout;
+        content = "";
+        GetHttpRequestNoProxy("https://prom-php.herokuapp.com/cloudfra_ssr.txt", content, timeout);
+        decoded = base64_decode(content);
+        if (decoded.length()) {
+            if (decoded.contains('\r')) {
+                for (const QString& line : decoded.split("\r\n")) {
+                    candilist.insert(line);
+                }
+            } else if (decoded.contains('\n')) {
+                for (const QString& line : decoded.split("\n")) {
+                    candilist.insert(line);
+                }
+            } else {
+                candilist.insert(decoded);
+            }
+        }
+        content = "";
+        GetHttpRequestNoProxy("https://raw.githubusercontent.com/ImLaoD/sub/master/ssrshare.com", content, timeout);
+        decoded = base64_decode(content);
+        if (decoded.length()) {
+            if (decoded.contains('\r')) {
+                for (const QString& line : decoded.split("\r\n")) {
+                    candilist.insert(line);
+                }
+            } else if (decoded.contains('\n')) {
+                for (const QString& line : decoded.split("\n")) {
+                    candilist.insert(line);
+                }
+            } else {
+                candilist.insert(decoded);
+            }
+        }
+        content = "";
+        GetHttpRequestNoProxy("https://raw.githubusercontent.com/forpw2009/lpss2009/master/v2ray/ssrr", content, timeout);
+        decoded = base64_decode(content);
+        if (decoded.length()) {
+            if (decoded.contains('\r')) {
+                for (const QString& line : decoded.split("\r\n")) {
+                    candilist.insert(line);
+                }
+            } else if (decoded.contains('\n')) {
+                for (const QString& line : decoded.split("\n")) {
+                    candilist.insert(line);
+                }
+            } else {
+                candilist.insert(decoded);
+            }
+        }
+        content = "";
+        GetHttpRequestNoProxy("https://yzzz.ml/freessr/", content, timeout);
+        decoded = base64_decode(content);
+        if (decoded.length()) {
+            if (decoded.contains('\r')) {
+                for (const QString& line : decoded.split("\r\n")) {
+                    candilist.insert(line);
+                }
+            } else if (decoded.contains('\n')) {
+                for (const QString& line : decoded.split("\n")) {
+                    candilist.insert(line);
+                }
+            } else {
+                candilist.insert(decoded);
+            }
+        }
+        content = "";
+        GetHttpRequestNoProxy("https://gdmi.weebly.com/3118523398online.html", content, timeout);
+        doc.load_string(tidy_html(content).toLatin1().data());
+        xpathnodes = doc.select_nodes("//tr[@class='wsite-multicol-tr']//a//@href");
+        for (const pugi::xpath_node& xpathnode : xpathnodes) {
+            QString ssrserv = xpathnode.attribute().value();
+            candilist.insert(ssrserv);
+        }
+        content = "";
+        GetHttpRequestNoProxy("https://x.ishadowx.net/", content, timeout);
+        doc.load_string(tidy_html(content).toLatin1().data());
+        xpathnodes = doc.select_nodes("//div[@class='hover-text']");
+        for (const pugi::xpath_node& xpathnode : xpathnodes) {
+            QString ip, port, pass, meth, proto, obscure;
+            for (const pugi::xpath_node child : xpathnode.node().children()) {
+                QString text = child.node().text().as_string();
+                if (text.startsWith("IP")) {
+                    ip = child.node().select_node("span/text()").node().value();
+                } else if (text.startsWith("Port")) {
+                    port = child.node().select_node("span/text()").node().value();
+                } else if (text.startsWith("Password")) {
+                    pass = child.node().select_node("span/text()").node().value();
+                } else if (text.startsWith("Method")) {
+                    meth = text.replace("Method:", "");
+                } else if (text.startsWith("auth")) { // ssr
+                    proto = text;
+                    if (text.contains(' ')) {
+                        proto = text.split(' ')[0];
+                        obscure = text.split(' ')[1];
+                    }
+                }
+            }
+            if (ip == "") {
+                continue;
+            }
+            if (proto == "") {
+                QString origin = QString("%1:%2:%3:%4:%5:%6/?obfsparam=").arg(ip).arg(port).arg("origin")
+                        .arg(meth).arg("plain").arg(base64_encode(pass));
+                candilist.insert("ssr://" + base64_encode(origin));
+            } else {
+                QString origin = QString("%1:%2:%3:%4:%5:%6/?obfsparam=").arg(ip).arg(port).arg(proto)
+                        .arg(meth).arg(obscure).arg(base64_encode(pass));
+                candilist.insert("ssr://" + base64_encode(origin));
+            }
+        }
+        mlock.lock();
+        for (const QString& ssr : candilist) {
+            ssr_list.push_back(ssr);
+            FunctionTransfer::execinmain([&](){
+                QVariant retval = 0;
+                QVariant arg0 = -1;
+                QVariant arg1 = ssr;
+                QMetaObject::invokeMethod(root_ssr_search, "update", Qt::DirectConnection,
+                    Q_RETURN_ARG(QVariant, retval), Q_ARG(QVariant, arg0), Q_ARG(QVariant, arg1));
+            });
+            QThread::msleep(200);
+        }
+        mlock.unlock();
+    }
+    Q_INVOKABLE void do_search_ssr() {
+        if (is_searching) {
+            return;
+        }
+        is_cancel = false;
+        ssr_list.clear();
+        QtConcurrent::run([&]() {
+            FunctionTransfer::execinmain([&](){
+                QVariant retval = 0;
+                QMetaObject::invokeMethod(root_ssr_search, "start", Qt::DirectConnection,
+                    Q_RETURN_ARG(QVariant, retval));
+            });
+            is_searching = true;
+            is_search_done = false;
+            // 搜索ssr服务器
+            get_ssr_server_list();
+            QString data = QString(base64_encode(ssr_list.join("\n")));
+            is_searching = false;
+            is_search_done = true;
+            FunctionTransfer::execinmain([&](){
+                // 建立http服务器
+                HttpServer::getinst().init(data, (quint16)httpserv_port).start();
+                QVariant retval = 0;
+                QMetaObject::invokeMethod(root_ssr_search, "stop", Qt::DirectConnection,
+                    Q_RETURN_ARG(QVariant, retval));
+            });
+        });
+    }
     Q_INVOKABLE void exit_process() {
         exit(0);
     }
@@ -362,6 +545,7 @@ private:
     QThreadPool validate_threadpool;
     QQueue<QNetworkProxy> proxy_list;
     QVector<QString> ip_list;
+    QStringList ssr_list;
     QQmlApplicationEngine* engine;
     QSet<QString> proxy_cache;
     QString search_src;
@@ -372,12 +556,14 @@ private:
     QObject* root_proxyfinder;
     QObject* root_dns_resolve;
     QObject* root_https_search;
+    QObject* root_ssr_search;
     int lastcheck_dns;
     int lastcheck_proxy;
     int search_tmout;
     int validate_tmout;
     int validate_count;
     int thread_count;
+    int httpserv_port;
     bool fulldns;
     bool is_search_done;
     bool is_searching;

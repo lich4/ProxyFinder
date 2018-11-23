@@ -1,31 +1,51 @@
 #include "proxysearcher.h"
 #include "utils.h"
 
-/*
+// https://prom-php.herokuapp.com/cloudfra_ssr.txt
+// https://raw.githubusercontent.com/ImLaoD/sub/master/ssrshare.com
+// https://yzzz.ml/freessr/
+
+// https://gdmi.weebly.com/3118523398online.html
+// //tr[@class='wsite-multicol-tr']//a//@href
+// xpathnode.attribute().value()
+
+// http://ss.pythonic.life/\1-\2 ->    \2失败则\1++  \1失败且\2为0则跳出
+// //input/@value
+// xpathnode.attribute().value()
+
+// http://ss.pythonic.life/subscribe
+// https://www.ssrtool.com/tool/free_ssr
+// https://www.ssrtool.com/tool/free_ssrC
+// https://x.ishadowx.net/
+
+
 void testxpath() {
-    QString root = "//table//tr[position()>1]";
+    QString root = "//section[@class='carousel']//a/@href";
     QString host = "td[1]/text()";
     QString port = "td[2]/text()";
     QString content;
-    GetHttpRequestNoProxy("https://github.com/", content, 10000);
-    log(content);
-    content = tidy_html(content);
     pugi::xml_document doc;
-    doc.load_string(content.toLatin1().data());
-
-    pugi::xpath_node_set xpathnodes = doc.select_nodes(root.toLatin1().data());
-    for (const pugi::xpath_node& xpathnode : xpathnodes) {
-        printxml(xpathnode.node(), 0);
-        const pugi::xml_node& xmlnode = xpathnode.node();
-        QString xx = xmlnode.name();
-        pugi::xpath_node hostnode = xmlnode.select_node(host.toLatin1().data());
-        pugi::xpath_node portnode = xmlnode.select_node(port.toLatin1().data());
-        QString host = hostnode.node().value();
-        quint16 port = static_cast<quint16>(QString(portnode.node().value()).toInt());
-        qDebug() << host;
+    int timeout = 10000;
+    int i = 0, j, isend = false;
+    while (!isend) {
+        j = 0;
+        while (true) {
+            content = "";
+            QString url = QString("https://ss.pythonic.life/%1-%2").arg(i).arg(j);
+            GetHttpRequestNoProxy(url, content, timeout);
+            doc.load_string(tidy_html(content).toLatin1().data());
+            pugi::xpath_node xpathnode = doc.select_node("//input/@value");
+            if (xpathnode.node().empty()) {
+                if (j == 0) {
+                    isend = true;
+                }
+                break;
+            }
+            qDebug() << xpathnode.attribute().value();
+        }
     }
 }
-*/
+
 
 int main(int argc, char *argv[])
 {
@@ -35,7 +55,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/images/qt-logo.ico"));
 
 
-    // testxpath();
+    //testxpath();
 
     QQmlApplicationEngine engine;
     QPM_INIT(engine)

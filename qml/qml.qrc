@@ -4,5 +4,6 @@
 		<file>basic_config.qml</file>
 		<file>dns_resolve.qml</file>
 		<file>https_search.qml</file>
+		<file>ssr_search.qml</file>
     </qresource>
 </RCC>
