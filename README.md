@@ -43,3 +43,5 @@ ssr订阅服务器配置
 
 
 ![截图](https://raw.githubusercontent.com/lichao890427/ProxyFinder/master/screenshot/proxyfinder_v1.1.png)
+
+![截图](https://github.com/lichao890427/ProxyFinder/raw/master/screenshot/ssr.png)
